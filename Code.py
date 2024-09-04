@@ -104,24 +104,37 @@ N = 10  # Number of rounds in each game
 
 # Simulate and Plot Results
 player1strategy = "grim"  # Player 1 uses the GRIM strategy
-for player2strategy in ["random", 'prob', 'reactive', 'zd']:
+comboScore=[]
+for player2strategy in ["random",'prob','reactive','zd','allC','allD','tft','stft']:
     Scores = replicateGame(M, N, player1strategy, player2strategy)  # Replicate the game
+    if player2strategy=='random':
+        comboScore.append(Scores[:,0])
+        comboScore.append(Scores[:,1])
+    else:
+        comboScore.append(Scores[:,1])
+    # Uncomment the following block to get PDFs
     plt.subplot(2, 1, 1)  # Create first subplot
     sns.histplot(Scores, alpha=0.5, stat='density')  # Plot histogram of scores
     plt.legend([player2strategy, player1strategy])  # Add legend
     plt.xlabel('Average Score')  # Label x-axis
     plt.title(player1strategy + ' versus ' + player2strategy)  # Add title
-    
     plt.subplot(2, 1, 2)  # Create second subplot
     ax = sns.violinplot(Scores, orient='h')  # Plot violin plot of scores
     ax.set_yticks([0, 1])  # Set y-ticks
     ax.set_yticklabels([player1strategy, player2strategy])  # Label y-ticks
     ax.set_xlabel('Average Score')  # Label x-axis
     
-    # Uncomment the following block to get ECDF (Empirical Cumulative Distribution Function)
+    # Uncomment the following block to get ECDFs (Empirical Cumulative Distribution Function)
     # ax = sns.ecdfplot(Scores)
     # ax.set_title('CDF of ' + player1strategy + ' and ' + player2strategy)
     # ax.legend([player2strategy, player1strategy])
     # ax.set_xlabel('Average Score')
     
     plt.show()  # Show the plot
+
+# Uncomment the following block to get violinplot
+# ax = sns.violinplot(comboScore, orient='v')
+# ax.set_xticks([0,1,2,3,4,5,6,7,8])  # Set y-ticks
+# ax.set_xticklabels(['grim',"random",'prob','reactive','zd','AllC','AllD','tft','stft'])  # Label y-ticks
+# ax.set_ylabel('Average Score')  # Label x-axis
+# plt.show()
